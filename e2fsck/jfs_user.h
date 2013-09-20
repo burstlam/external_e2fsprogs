@@ -14,6 +14,12 @@
  */
 #include "e2fsck.h"
 
+#ifdef __clang__
+#define EXTERN static
+#else
+#define EXTERN extern
+#endif
+
 struct buffer_head {
 	e2fsck_t	b_ctx;
 	io_channel 	b_io;
@@ -76,18 +82,22 @@ typedef unsigned int __be32;
  * We use the standard libext2fs portability tricks for inline
  * functions.
  */
-extern lkmem_cache_t * do_cache_create(int len);
-extern void do_cache_destroy(lkmem_cache_t *cache);
-extern size_t journal_tag_bytes(journal_t *journal);
+EXTERN lkmem_cache_t * do_cache_create(int len);
+EXTERN void do_cache_destroy(lkmem_cache_t *cache);
+EXTERN size_t journal_tag_bytes(journal_t *journal);
 
 #if (defined(E2FSCK_INCLUDE_INLINE_FUNCS) || !defined(NO_INLINE_FUNCS))
 #ifdef E2FSCK_INCLUDE_INLINE_FUNCS
 #define _INLINE_ extern
 #else
+#ifdef __clang__
+#define _INLINE_ static
+#else
 #ifdef __GNUC__
 #define _INLINE_ extern __inline__
 #else				/* For Watcom C */
 #define _INLINE_ extern inline
+#endif
 #endif
 #endif
 
