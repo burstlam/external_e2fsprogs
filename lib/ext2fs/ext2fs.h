@@ -18,6 +18,12 @@
 #define EXT2FS_ATTR(x)
 #endif
 
+#ifdef __clang__
+#define EXTERN static
+#else
+#define EXTERN extern
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1156,29 +1162,29 @@ extern errcode_t ext2fs_write_bb_FILE(ext2_badblocks_list bb_list,
 
 
 /* inline functions */
-extern errcode_t ext2fs_get_mem(unsigned long size, void *ptr);
-extern errcode_t ext2fs_get_memalign(unsigned long size,
+EXTERN errcode_t ext2fs_get_mem(unsigned long size, void *ptr);
+EXTERN errcode_t ext2fs_get_memalign(unsigned long size,
 				     unsigned long align, void *ptr);
-extern errcode_t ext2fs_free_mem(void *ptr);
-extern errcode_t ext2fs_resize_mem(unsigned long old_size,
+EXTERN errcode_t ext2fs_free_mem(void *ptr);
+EXTERN errcode_t ext2fs_resize_mem(unsigned long old_size,
 				   unsigned long size, void *ptr);
-extern void ext2fs_mark_super_dirty(ext2_filsys fs);
-extern void ext2fs_mark_changed(ext2_filsys fs);
-extern int ext2fs_test_changed(ext2_filsys fs);
-extern void ext2fs_mark_valid(ext2_filsys fs);
-extern void ext2fs_unmark_valid(ext2_filsys fs);
-extern int ext2fs_test_valid(ext2_filsys fs);
-extern void ext2fs_mark_ib_dirty(ext2_filsys fs);
-extern void ext2fs_mark_bb_dirty(ext2_filsys fs);
-extern int ext2fs_test_ib_dirty(ext2_filsys fs);
-extern int ext2fs_test_bb_dirty(ext2_filsys fs);
-extern int ext2fs_group_of_blk(ext2_filsys fs, blk_t blk);
-extern int ext2fs_group_of_ino(ext2_filsys fs, ext2_ino_t ino);
-extern blk_t ext2fs_group_first_block(ext2_filsys fs, dgrp_t group);
-extern blk_t ext2fs_group_last_block(ext2_filsys fs, dgrp_t group);
-extern blk_t ext2fs_inode_data_blocks(ext2_filsys fs,
+EXTERN void ext2fs_mark_super_dirty(ext2_filsys fs);
+EXTERN void ext2fs_mark_changed(ext2_filsys fs);
+EXTERN int ext2fs_test_changed(ext2_filsys fs);
+EXTERN void ext2fs_mark_valid(ext2_filsys fs);
+EXTERN void ext2fs_unmark_valid(ext2_filsys fs);
+EXTERN int ext2fs_test_valid(ext2_filsys fs);
+EXTERN void ext2fs_mark_ib_dirty(ext2_filsys fs);
+EXTERN void ext2fs_mark_bb_dirty(ext2_filsys fs);
+EXTERN int ext2fs_test_ib_dirty(ext2_filsys fs);
+EXTERN int ext2fs_test_bb_dirty(ext2_filsys fs);
+EXTERN int ext2fs_group_of_blk(ext2_filsys fs, blk_t blk);
+EXTERN int ext2fs_group_of_ino(ext2_filsys fs, ext2_ino_t ino);
+EXTERN blk_t ext2fs_group_first_block(ext2_filsys fs, dgrp_t group);
+EXTERN blk_t ext2fs_group_last_block(ext2_filsys fs, dgrp_t group);
+EXTERN blk_t ext2fs_inode_data_blocks(ext2_filsys fs,
 				      struct ext2_inode *inode);
-extern unsigned int ext2fs_div_ceil(unsigned int a, unsigned int b);
+EXTERN unsigned int ext2fs_div_ceil(unsigned int a, unsigned int b);
 
 /*
  * The actual inlined functions definitions themselves...
@@ -1190,10 +1196,14 @@ extern unsigned int ext2fs_div_ceil(unsigned int a, unsigned int b);
 #ifdef INCLUDE_INLINE_FUNCS
 #define _INLINE_ extern
 #else
+#ifdef __clang__
+#define _INLINE_ static
+#else
 #ifdef __GNUC__
 #define _INLINE_ extern __inline__
 #else				/* For Watcom C */
 #define _INLINE_ extern inline
+#endif
 #endif
 #endif
 
